@@ -1,0 +1,75 @@
+{
+  "app": {
+    "title": "PSCode",
+    "untitled": "Untitled"
+  },
+  "sidebar": {
+    "today": "Today",
+    "recent": "Recent",
+    "newProblem": "New Problem",
+    "collapse": "Collapse",
+    "expand": "Expand",
+    "noFiles": "No files today"
+  },
+  "editor": {
+    "placeholder": "Create or open a problem to start coding"
+  },
+  "testcase": {
+    "title": "Input",
+    "placeholder": "Enter custom test input..."
+  },
+  "console": {
+    "title": "Output",
+    "build": "Build",
+    "run": "Run",
+    "empty": "Press Ctrl+Enter to compile and run",
+    "executionTime": "Execution time: {{ms}} ms",
+    "compileFailed": "Compilation failed",
+    "running": "Running..."
+  },
+  "compiler": {
+    "found": "Compiler ready",
+    "notFound": "Compiler not found",
+    "detect": "Detect"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "compilerPath": "Compiler path (g++)",
+    "workspaceRoot": "Workspace folder",
+    "autosave": "Autosave interval (ms)",
+    "browse": "Browse",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "newProblem": {
+    "title": "New Problem",
+    "nameLabel": "Problem name",
+    "namePlaceholder": "e.g. BOJ 1000 A+B",
+    "create": "Create",
+    "cancel": "Cancel",
+    "error": "Failed to create problem"
+  },
+  "command": {
+    "palette": "Command Palette",
+    "placeholder": "Type a command...",
+    "newProblem": "New Problem",
+    "run": "Compile and Run",
+    "save": "Save File",
+    "settings": "Open Settings",
+    "toggleSidebar": "Toggle Sidebar",
+    "toggleConsole": "Toggle Console",
+    "switchLangKo": "Switch to Korean",
+    "switchLangEn": "Switch to English"
+  },
+  "status": {
+    "saved": "Saved",
+    "unsaved": "Unsaved",
+    "saving": "Saving..."
+  },
+  "shortcuts": {
+    "run": "Ctrl+Enter",
+    "save": "Ctrl+S",
+    "palette": "Ctrl+Shift+P"
+  }
+}

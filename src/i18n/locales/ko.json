@@ -1,0 +1,75 @@
+{
+  "app": {
+    "title": "PSCode",
+    "untitled": "제목 없음"
+  },
+  "sidebar": {
+    "today": "오늘",
+    "recent": "최근",
+    "newProblem": "새 문제",
+    "collapse": "접기",
+    "expand": "펼치기",
+    "noFiles": "오늘 생성된 파일이 없습니다"
+  },
+  "editor": {
+    "placeholder": "문제를 생성하거나 열어서 코딩을 시작하세요"
+  },
+  "testcase": {
+    "title": "입력",
+    "placeholder": "테스트 입력을 입력하세요..."
+  },
+  "console": {
+    "title": "출력",
+    "build": "빌드",
+    "run": "실행",
+    "empty": "Ctrl+Enter로 컴파일 및 실행",
+    "executionTime": "실행 시간: {{ms}} ms",
+    "compileFailed": "컴파일 실패",
+    "running": "실행 중..."
+  },
+  "compiler": {
+    "found": "컴파일러 준비됨",
+    "notFound": "컴파일러를 찾을 수 없음",
+    "detect": "탐지"
+  },
+  "settings": {
+    "title": "설정",
+    "language": "언어",
+    "compilerPath": "컴파일러 경로 (g++)",
+    "workspaceRoot": "작업 폴더",
+    "autosave": "자동 저장 간격 (ms)",
+    "browse": "찾아보기",
+    "save": "저장",
+    "cancel": "취소"
+  },
+  "newProblem": {
+    "title": "새 문제",
+    "nameLabel": "문제 이름",
+    "namePlaceholder": "예: BOJ 1000 A+B",
+    "create": "생성",
+    "cancel": "취소",
+    "error": "문제 생성에 실패했습니다"
+  },
+  "command": {
+    "palette": "명령 팔레트",
+    "placeholder": "명령어를 입력하세요...",
+    "newProblem": "새 문제",
+    "run": "컴파일 및 실행",
+    "save": "파일 저장",
+    "settings": "설정 열기",
+    "toggleSidebar": "사이드바 토글",
+    "toggleConsole": "콘솔 토글",
+    "switchLangKo": "한국어로 전환",
+    "switchLangEn": "영어로 전환"
+  },
+  "status": {
+    "saved": "저장됨",
+    "unsaved": "저장 안 됨",
+    "saving": "저장 중..."
+  },
+  "shortcuts": {
+    "run": "Ctrl+Enter",
+    "save": "Ctrl+S",
+    "palette": "Ctrl+Shift+P"
+  }
+}
