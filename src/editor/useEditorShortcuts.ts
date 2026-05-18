@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { KeyCode, KeyMod, type editor } from "monaco-editor";
 import { open } from "@tauri-apps/plugin-dialog";
 import { useEditorStore } from "./editorStore";
+import { useEditorRefStore } from "./editorRefStore";
 import { useUiStore } from "@/ui/stores/uiStore";
 import { useConsoleStore } from "@/ui/stores/consoleStore";
 import { useSettingsStore } from "@/settings/settingsStore";
@@ -20,6 +21,12 @@ export function useEditorShortcuts(
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       const mod = e.ctrlKey || e.metaKey;
+
+      if (e.key === "F5") {
+        e.preventDefault();
+        handlers.onRun();
+        return;
+      }
 
       if (mod && e.key === "Enter") {
         e.preventDefault();
@@ -50,6 +57,14 @@ export function useEditorShortcuts(
       if (mod && e.shiftKey && e.key.toLowerCase() === "p") {
         e.preventDefault();
         useUiStore.getState().setCommandPaletteOpen(true);
+        return;
+      }
+
+      if (mod && e.shiftKey && e.key.toLowerCase() === "f") {
+        e.preventDefault();
+        useEditorRefStore.getState().editorRef
+          ?.getAction("editor.action.formatDocument")
+          ?.run();
         return;
       }
 

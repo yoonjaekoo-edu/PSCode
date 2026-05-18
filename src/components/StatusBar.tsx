@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useEditorStore } from "@/editor/editorStore";
+import { useEditorRefStore } from "@/editor/editorRefStore";
 import { useSettingsStore } from "@/settings/settingsStore";
 import { useUiStore } from "@/ui/stores/uiStore";
 
@@ -10,6 +11,7 @@ export function StatusBar() {
   const compilerFound = useSettingsStore((s) => s.compilerFound);
   const language = useSettingsStore((s) => s.language);
   const setCommandPaletteOpen = useUiStore((s) => s.setCommandPaletteOpen);
+  const editorRef = useEditorRefStore((s) => s.editorRef);
 
   const fileName = filePath
     ? filePath.split(/[/\\]/).pop()
@@ -21,6 +23,10 @@ export function StatusBar() {
       : saveStatus === "unsaved"
         ? t("status.unsaved")
         : t("status.saved");
+
+  const handleFormat = () => {
+    editorRef?.getAction("editor.action.formatDocument")?.run();
+  };
 
   return (
     <footer className="flex items-center gap-4 px-3 py-1 text-xs bg-[var(--accent)] text-white shrink-0">
@@ -34,6 +40,15 @@ export function StatusBar() {
           ⌘P
         </span>
         {t("command.palette")}
+      </button>
+
+      <button
+        type="button"
+        onClick={handleFormat}
+        className="flex items-center gap-1.5 px-2 py-0.5 hover:bg-white/10 rounded transition-colors"
+        title="Ctrl+Shift+F"
+      >
+        {t("command.formatCode")}
       </button>
 
       <div className="h-3 w-[1px] bg-white/20 mx-1" />

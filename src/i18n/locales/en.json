@@ -22,7 +22,7 @@
     "title": "Output",
     "build": "Build",
     "run": "Run",
-    "empty": "Press Ctrl+Enter to compile and run",
+    "empty": "Press Ctrl+Enter or F5 to compile and run",
     "executionTime": "Execution time: {{ms}} ms",
     "compileFailed": "Compilation failed",
     "running": "Running..."
@@ -60,7 +60,9 @@
     "toggleSidebar": "Toggle Sidebar",
     "toggleConsole": "Toggle Console",
     "switchLangKo": "Switch to Korean",
-    "switchLangEn": "Switch to English"
+    "switchLangEn": "Switch to English",
+    "autoSpacing": "Auto Korean Spacing",
+    "formatCode": "Format Code"
   },
   "status": {
     "saved": "Saved",
@@ -68,7 +70,7 @@
     "saving": "Saving..."
   },
   "shortcuts": {
-    "run": "Ctrl+Enter",
+    "run": "Ctrl+Enter / F5",
     "save": "Ctrl+S",
     "palette": "Ctrl+Shift+P"
   }

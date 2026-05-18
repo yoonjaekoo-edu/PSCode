@@ -3,8 +3,10 @@ import { useTranslation } from "react-i18next";
 import { useUiStore } from "@/ui/stores/uiStore";
 import { useSettingsStore } from "@/settings/settingsStore";
 import { useEditorStore } from "@/editor/editorStore";
+import { useEditorRefStore } from "@/editor/editorRefStore";
 import { useConsoleStore } from "@/ui/stores/consoleStore";
 import { useCompileRun } from "@/compiler/useCompileRun";
+import { autoSpacing } from "@/lib/autoSpacing";
 import { cn } from "@/lib/cn";
 
 interface Command {
@@ -69,6 +71,25 @@ export function CommandPalette() {
         id: "langEn",
         labelKey: "command.switchLangEn",
         action: () => useSettingsStore.getState().setLanguage("en"),
+      },
+      {
+        id: "autoSpacing",
+        labelKey: "command.autoSpacing",
+        action: () => {
+          const content = useEditorStore.getState().content;
+          const spaced = autoSpacing(content);
+          useEditorStore.getState().setContent(spaced);
+        },
+      },
+      {
+        id: "formatCode",
+        labelKey: "command.formatCode",
+        action: () => {
+          const editor = useEditorRefStore.getState().editorRef;
+          if (editor) {
+            editor.getAction("editor.action.formatDocument")?.run();
+          }
+        },
       },
     ],
     [run, setNewProblemOpen, setSettingsOpen],

@@ -3,6 +3,7 @@ import Editor, { type OnMount } from "@monaco-editor/react";
 import type { editor } from "monaco-editor";
 import { useTranslation } from "react-i18next";
 import { useEditorStore } from "./editorStore";
+import { useEditorRefStore } from "./editorRefStore";
 import { registerSnippets } from "@/snippets/registerSnippets";
 import { useEditorShortcuts } from "./useEditorShortcuts";
 import { useCompileRun } from "@/compiler/useCompileRun";
@@ -20,6 +21,7 @@ export function MonacoEditor() {
   const content = useEditorStore((s) => s.content);
   const filePath = useEditorStore((s) => s.filePath);
   const setContent = useEditorStore((s) => s.setContent);
+  const setEditorRef = useEditorRefStore((s) => s.setEditorRef);
   const [editorInstance, setEditorInstance] =
     useState<editor.IStandaloneCodeEditor | null>(null);
   const disposeSnippets = useRef<(() => void) | null>(null);
@@ -29,10 +31,11 @@ export function MonacoEditor() {
 
   const handleMount: OnMount = useCallback((ed, monaco) => {
     setEditorInstance(ed);
+    setEditorRef(ed);
     disposeSnippets.current?.();
     disposeSnippets.current = registerSnippets(monaco);
     ed.focus();
-  }, []);
+  }, [setEditorRef]);
 
   if (!filePath) {
     return (
