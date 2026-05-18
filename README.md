@@ -2,6 +2,8 @@
 
 경량 competitive programming 데스크톱 에디터 (Tauri 2 + React + Monaco).
 
+## 업데이트 예정
+
 ## 사전 요구사항
 
 - Node.js 20+
