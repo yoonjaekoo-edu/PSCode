@@ -104,5 +104,9 @@ export function useEditorShortcuts(
     if (!editorRef) return;
 
     editorRef.addCommand(KeyMod.CtrlCmd | KeyCode.Enter, () => handlers.onRun());
+    editorRef.addCommand(KeyCode.F5, () => handlers.onRun());
+    editorRef.addCommand(KeyMod.CtrlCmd | KeyMod.Shift | KeyCode.KeyF, () => {
+      editorRef.getAction("editor.action.formatDocument")?.run();
+    });
   }, [editorRef, handlers]);
 }

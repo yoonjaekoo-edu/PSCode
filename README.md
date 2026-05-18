@@ -29,11 +29,18 @@ npm run tauri dev
 npm run tauri build
 ```
 
+또는 제공된 PowerShell 스크립트를 사용하여 빌드와 GitHub 커밋을 동시에 수행할 수 있습니다:
+
+```powershell
+./build-deploy.ps1
+```
+
 ## 주요 기능
 
 - Monaco C++ 에디터 + CP 스니펫 (`fastio`, `all`, `rall`, `forn`, `forr`, `pb`, `eb`)
-- `Ctrl+Enter` 컴파일 및 실행 (g++ C++17)
+- `F5` 또는 `Ctrl+Enter` 컴파일 및 실행 (g++ C++17)
 - 커스텀 테스트 입력 / 출력 콘솔
+- 코드 가독성 향상 (자동 띄어쓰기 교정)
 - 날짜별 문제 폴더 (`projects/YYYY-MM-DD/`)
 - 한국어/영어 UI
 - 명령 팔레트 (`Ctrl+Shift+P`)
@@ -43,8 +50,9 @@ npm run tauri build
 
 | 단축키 | 동작 |
 |--------|------|
-| `Ctrl+Enter` | 컴파일 + 실행 |
+| `F5` / `Ctrl+Enter` | 컴파일 + 실행 |
 | `Ctrl+S` | 저장 |
+| `Ctrl+Shift+F` | 코드 자동 정렬 |
 | `Ctrl+Shift+P` | 명령 팔레트 |
 | `Ctrl+N` | 새 문제 |
 | `Ctrl+,` | 설정 |
