@@ -4,7 +4,7 @@ import { CPP_SNIPPETS } from "./cppSnippets";
 
 export function registerSnippets(monaco: Monaco): () => void {
   const provider = monaco.languages.registerCompletionItemProvider("cpp", {
-    triggerCharacters: ["a", "f", "p", "e", "r"],
+    triggerCharacters: ["#", ".", ":", "a", "b", "c", "d", "e", "f", "g", "h", "i", "l", "m", "p", "q", "r", "s", "u", "v", "w"],
     provideCompletionItems: (
       model: monacoEditor.editor.ITextModel,
       position: monacoEditor.Position,

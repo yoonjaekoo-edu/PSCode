@@ -2,7 +2,7 @@ mod commands;
 
 use commands::{
     compile_and_run, create_problem_file, detect_compiler, ensure_workspace, get_settings,
-    list_today_files, read_file, save_settings, write_file,
+    install_compiler, list_today_files, read_file, save_settings, write_file,
 };
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -13,6 +13,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             compile_and_run,
             detect_compiler,
+            install_compiler,
             read_file,
             write_file,
             list_today_files,

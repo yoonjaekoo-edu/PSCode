@@ -7,17 +7,20 @@ import { DEFAULT_SETTINGS } from "./types";
 interface SettingsState extends AppSettings {
   loaded: boolean;
   compilerFound: boolean;
+  isInstalling: boolean;
   loadSettings: () => Promise<void>;
   updateSettings: (partial: Partial<AppSettings>) => void;
   persistSettings: () => Promise<void>;
   setLanguage: (lang: string) => Promise<void>;
   detectCompiler: () => Promise<void>;
+  installCompiler: () => Promise<void>;
 }
 
 export const useSettingsStore = create<SettingsState>((set, get) => ({
   ...DEFAULT_SETTINGS,
   loaded: false,
   compilerFound: false,
+  isInstalling: false,
 
   loadSettings: async () => {
     try {
@@ -75,5 +78,16 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
       compilerFound: info.found,
       compilerPath: info.found ? info.path : compilerPath,
     });
+  },
+
+  installCompiler: async () => {
+    if (get().isInstalling) return;
+    set({ isInstalling: true });
+    try {
+      await invoke("install_compiler");
+      await get().detectCompiler();
+    } finally {
+      set({ isInstalling: false });
+    }
   },
 }));

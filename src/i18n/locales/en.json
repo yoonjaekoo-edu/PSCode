@@ -30,7 +30,11 @@
   "compiler": {
     "found": "Compiler ready",
     "notFound": "Compiler not found",
-    "detect": "Detect"
+    "detect": "Detect",
+    "install": "Auto-Install (MSYS2)",
+    "installing": "Installing...",
+    "installSuccess": "Compiler installed successfully",
+    "installFailed": "Installation failed: {{error}}"
   },
   "settings": {
     "title": "Settings",

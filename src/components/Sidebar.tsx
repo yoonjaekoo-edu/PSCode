@@ -40,9 +40,12 @@ export function Sidebar() {
   return (
     <aside className="flex flex-col w-56 shrink-0 bg-[var(--bg-secondary)] border-r border-[var(--border)] transition-all duration-200">
       <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border)]">
-        <span className="text-sm font-semibold text-[var(--text-primary)]">
-          {t("app.title")}
-        </span>
+        <div className="flex items-center gap-2">
+          <img src="/logo.png" alt="Logo" className="w-5 h-5 object-contain" />
+          <span className="text-sm font-semibold text-[var(--text-primary)]">
+            {t("app.title")}
+          </span>
+        </div>
         <IconButton title={t("sidebar.collapse")} onClick={toggleSidebar}>
           ←
         </IconButton>

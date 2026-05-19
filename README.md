@@ -1,52 +1,55 @@
 # PSCode
 
-경량 competitive programming 데스크톱 에디터 (Tauri 2 + React + Monaco).
+경량 competitive programming 데스크톱 에디터 (Tauri 2 + React + Monaco).  
+PS(Competitive Programming) 전용 도구로, 빠른 코드 작성과 즉각적인 실행 환경을 제공합니다.
 
-## 사전 요구사항
+## 🚀 배포 및 자동화 (CI/CD)
+
+### GitHub Actions 자동 배포
+- **자동 빌드**: `v*` 형태의 태그(예: `v0.1.0`)를 푸시하면 GitHub Actions가 자동으로 Windows용 실행 파일(.exe)을 빌드합니다.
+- **Release 자동 생성**: 빌드된 결과물은 GitHub Release에 초안(Draft)으로 업로드되어 즉시 배포 가능합니다.
+
+### 간편 배포 스크립트
+제공된 스크립트를 사용하여 커밋, 푸시, 태그 생성을 한 번에 처리할 수 있습니다:
+- **`deploy.bat`**: 더블 클릭만으로 실행 가능.
+- **`./build-deploy.ps1`**: 커밋 메시지를 입력받아 메인 브랜치에 푸시하고, 선택 시 배포용 태그까지 생성합니다.
+
+---
+
+## ✨ 주요 기능
+
+### 지능형 코드 에디터 (Monaco)
+- **대규모 PS 스니펫 지원**: 
+  - 기본: `bits`, `fastio`, `ll`, `cinn`, `cinv` 등
+  - 알고리즘: `bfs`, `dfs`, `dijkstra`, `binarysearch`, `prime` 등
+  - 자료구조: `segtree`, `unionfind`, `pqmin` 등
+  - 기타: `modpow`, `comb`, `bitmask` 등
+- **코드 가독성 도구**:
+  - **코드 정렬**: `Ctrl+Shift+F` 또는 하단 버튼을 통해 들여쓰기 자동 정리.
+  - **자동 띄어쓰기**: 연산자 및 키워드 사이의 공백을 자동으로 교정.
+
+### 환경 구성 자동화
+- **컴파일러 자동 설치**: 설정 창(`Ctrl+,`)에서 **버튼 클릭 한 번으로 MSYS2 및 MinGW64 GCC를 자동 설치**할 수 있습니다. (Windows 전용)
+- **지능형 탐지**: 시스템에 설치된 컴파일러 경로를 자동으로 찾아 연결합니다.
+
+### 워크스페이스 관리
+- **자동 폴더링**: 날짜별 문제 폴더 (`projects/YYYY-MM-DD/`) 자동 생성.
+- **기본 템플릿**: 새 파일 생성 시 최적화된 C++ Boilerplate (`bits/stdc++.h`, `fastio`) 즉시 제공.
+- **자동 저장**: 입력과 동시에 변경 사항을 안전하게 저장.
+
+---
+
+## 🛠 사전 요구사항
 
 - Node.js 20+
 - Rust ([rustup](https://rustup.rs/))
 - Windows: Visual Studio Build Tools, WebView2
-- C++17 컴파일러: [MSYS2](https://www.msys2.org/) mingw64 권장
+- **C++17 컴파일러**: [MSYS2](https://www.msys2.org/) mingw64 권장
+  - **프로그램 내에서 자동 설치 기능을 제공합니다.** 수동 설치 시 기본 경로는 `C:\msys64\mingw64\bin\g++.exe`입니다.
 
-```bash
-# MSYS2에서
-pacman -S mingw-w64-x86_64-gcc
-```
+---
 
-기본 g++ 경로: `C:\msys64\mingw64\bin\g++.exe`
-
-## 설치 및 실행
-
-```bash
-npm install
-npm run tauri dev
-```
-
-## 프로덕션 빌드
-
-```bash
-npm run tauri build
-```
-
-또는 제공된 PowerShell 스크립트를 사용하여 빌드와 GitHub 커밋을 동시에 수행할 수 있습니다:
-
-```powershell
-./build-deploy.ps1
-```
-
-## 주요 기능
-
-- Monaco C++ 에디터 + CP 스니펫 (`fastio`, `all`, `rall`, `forn`, `forr`, `pb`, `eb`)
-- `F5` 또는 `Ctrl+Enter` 컴파일 및 실행 (g++ C++17)
-- 커스텀 테스트 입력 / 출력 콘솔
-- 코드 가독성 향상 (자동 띄어쓰기 교정)
-- 날짜별 문제 폴더 (`projects/YYYY-MM-DD/`)
-- 한국어/영어 UI
-- 명령 팔레트 (`Ctrl+Shift+P`)
-- 자동 저장 및 설정 영속화
-
-## 키보드 단축키
+## ⌨️ 키보드 단축키
 
 | 단축키 | 동작 |
 |--------|------|
@@ -59,11 +62,9 @@ npm run tauri build
 | `Ctrl+B` | 사이드바 토글 |
 | `` Ctrl+` `` | 출력 콘솔 토글 |
 
-## 작업 폴더
+---
 
-기본값: `Documents/PSCode`  
-설정에서 변경 가능. 소스 파일은 `{workspace}/projects/YYYY-MM-DD/*.cpp`에 저장됩니다.
+## 📂 작업 환경
 
-## 설정 파일
-
-`%APPDATA%\com.pscode.app\.pscode\settings.json`
+- **작업 폴더**: `Documents/PSCode` (설정에서 변경 가능)
+- **설정 파일**: `%APPDATA%\com.pscode.app\.pscode\settings.json`

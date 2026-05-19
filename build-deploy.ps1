@@ -40,12 +40,8 @@ if (-not $CommitMessage) {
 }
 
 try {
-    # 1. Build
-    Write-Host "`n[1/3] Building Tauri Application (EXE)..." -ForegroundColor Yellow
-    npm run tauri build -- --silent
-
-    # 2. Git Commit
-    Write-Host "`n[2/3] Staging and Committing changes..." -ForegroundColor Yellow
+    # 1. Git Commit
+    Write-Host "`n[1/2] Staging and Committing changes..." -ForegroundColor Yellow
     git add .
     $status = git status --porcelain
     if ($status) {
@@ -55,12 +51,30 @@ try {
         Write-Host "No changes to commit." -ForegroundColor Gray
     }
 
-    # 3. Git Push
-    Write-Host "`n[3/3] Pushing to GitHub..." -ForegroundColor Yellow
+    # 2. Git Push
+    Write-Host "`n[2/3] Pushing to GitHub (main)..." -ForegroundColor Yellow
     git push origin main --quiet
 
+    # 3. Create Release Tag (Optional)
+    Write-Host "`n[3/3] Deployment Options" -ForegroundColor Yellow
+    $DoRelease = Read-Host "Create a new release tag and deploy? (y/n)"
+    if ($DoRelease -eq 'y') {
+        $Version = Read-Host "Enter version tag (e.g., v1.0.0)"
+        if (-not [string]::IsNullOrWhiteSpace($Version)) {
+            if (-not $Version.StartsWith("v")) { $Version = "v$Version" }
+            Write-Host "Creating and pushing tag: $Version..." -ForegroundColor Cyan
+            git tag $Version
+            git push origin $Version --quiet
+            Write-Host "Tag pushed! GitHub Actions will now start the build & release process." -ForegroundColor Green
+        } else {
+            Write-Host "No version entered. Skipping release." -ForegroundColor Gray
+        }
+    } else {
+        Write-Host "Skipping release process." -ForegroundColor Gray
+    }
+
     Write-Host "`n========================================" -ForegroundColor Green
-    Write-Host "  Success! PSCode has been deployed.    " -ForegroundColor Green
+    Write-Host "  Success! Changes have been processed. " -ForegroundColor Green
     Write-Host "========================================" -ForegroundColor Green
 }
 catch {

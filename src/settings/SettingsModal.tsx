@@ -112,22 +112,34 @@ export function SettingsModal() {
           </Field>
 
           <Field label={t("settings.compilerPath")}>
-            <div className="flex gap-2">
-              <input
-                value={draft.compilerPath}
-                onChange={(e) =>
-                  setDraft((d) => ({ ...d, compilerPath: e.target.value }))
-                }
-                placeholder="C:\msys64\mingw64\bin\g++.exe"
-                className="flex-1 px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border)] rounded text-sm font-mono text-[var(--text-primary)]"
-              />
-              <button
-                type="button"
-                onClick={() => void detectCompiler()}
-                className="px-3 py-2 text-sm bg-[var(--bg-tertiary)] hover:bg-[var(--bg-hover)] rounded transition-colors text-[var(--text-primary)]"
-              >
-                {t("compiler.detect")}
-              </button>
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-2">
+                <input
+                  value={draft.compilerPath}
+                  onChange={(e) =>
+                    setDraft((d) => ({ ...d, compilerPath: e.target.value }))
+                  }
+                  placeholder="C:\msys64\mingw64\bin\g++.exe"
+                  className="flex-1 px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border)] rounded text-sm font-mono text-[var(--text-primary)]"
+                />
+                <button
+                  type="button"
+                  onClick={() => void detectCompiler()}
+                  className="px-3 py-2 text-sm bg-[var(--bg-tertiary)] hover:bg-[var(--bg-hover)] rounded transition-colors text-[var(--text-primary)]"
+                >
+                  {t("compiler.detect")}
+                </button>
+              </div>
+              {!settings.compilerFound && (
+                <button
+                  type="button"
+                  disabled={settings.isInstalling}
+                  onClick={() => void settings.installCompiler()}
+                  className="w-full py-2 text-sm bg-[var(--accent)] hover:bg-[var(--accent-hover)] disabled:bg-gray-600 text-white rounded transition-colors"
+                >
+                  {settings.isInstalling ? t("compiler.installing") : t("compiler.install")}
+                </button>
+              )}
             </div>
           </Field>
 

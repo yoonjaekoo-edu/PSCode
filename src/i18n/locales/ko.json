@@ -30,7 +30,11 @@
   "compiler": {
     "found": "컴파일러 준비됨",
     "notFound": "컴파일러를 찾을 수 없음",
-    "detect": "탐지"
+    "detect": "탐지",
+    "install": "자동 설치 (MSYS2)",
+    "installing": "설치 중...",
+    "installSuccess": "컴파일러가 성공적으로 설치되었습니다",
+    "installFailed": "설치에 실패했습니다: {{error}}"
   },
   "settings": {
     "title": "설정",
