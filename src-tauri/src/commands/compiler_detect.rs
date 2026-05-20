@@ -46,28 +46,33 @@ pub async fn install_compiler() -> Result<String, String> {
     #[cfg(windows)]
     {
         let script = r#"
-            $ProgressPreference = 'SilentlyContinue'
-            Write-Host "Checking for MSYS2..."
+            $ProgressPreference = 'Continue'
+            Write-Host "--- MSYS2 & MinGW64 Installation ---"
+            
             if (!(Test-Path C:\msys64)) {
-                Write-Host "MSYS2 not found. Attempting to install via winget..."
+                Write-Host "MSYS2 not found. Starting installer..."
                 if (Get-Command winget -ErrorAction SilentlyContinue) {
-                    winget install MSYS2.MSYS2 --silent --accept-package-agreements --accept-source-agreements
+                    # Removed --silent to allow user to see the progress
+                    winget install MSYS2.MSYS2 --accept-package-agreements --accept-source-agreements
                 } else {
-                    Write-Host "winget not found. Downloading installer..."
+                    Write-Host "winget not found. Downloading installer from MSYS2 official site..."
                     $url = "https://github.com/msys2/msys2-installer/releases/download/2024-05-07/msys2-x86_64-20240507.exe"
                     $out = "$env:TEMP\msys2-installer.exe"
                     Invoke-WebRequest -Uri $url -OutFile $out
-                    Write-Host "Running installer..."
-                    Start-Process -FilePath $out -ArgumentList "--confirm-command --accept-messages --root C:\msys64" -Wait
+                    Write-Host "Running installer... Please follow the installation wizard."
+                    # Removed automatic confirmation flags to make it interactive
+                    Start-Process -FilePath $out -Wait
                 }
             }
             
             if (Test-Path C:\msys64\usr\bin\bash.exe) {
-                Write-Host "Installing MinGW64 GCC..."
+                Write-Host "Installing MinGW64 GCC compiler package..."
+                Write-Host "A terminal window will open to run pacman. Please do not close it."
+                # Run bash in a new window so user can see pacman progress
                 Start-Process -FilePath "C:\msys64\usr\bin\bash.exe" -ArgumentList "-lc", "'pacman -S --noconfirm mingw-w64-x86_64-gcc'" -Wait
                 return "Success"
             } else {
-                throw "MSYS2 installation failed or path not found."
+                throw "MSYS2 installation was not completed. Please install it manually from https://www.msys2.org/"
             }
         "#;
 
