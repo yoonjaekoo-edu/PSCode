@@ -3,3 +3,11 @@ export interface TodayFile {
   name: string;
   modifiedMs: number;
 }
+
+export interface FileEntry {
+  path: string;
+  name: string;
+  isDir: boolean;
+  children?: FileEntry[];
+}
+

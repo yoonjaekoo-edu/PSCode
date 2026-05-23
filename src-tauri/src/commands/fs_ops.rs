@@ -194,3 +194,127 @@ pub fn create_problem_file(
 
     Ok(file_path.to_string_lossy().to_string())
 }
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FileEntry {
+    pub path: String,
+    pub name: String,
+    pub is_dir: bool,
+    pub children: Option<Vec<FileEntry>>,
+}
+
+fn list_dir_helper(path: &Path) -> Result<Vec<FileEntry>, String> {
+    let mut entries = Vec::new();
+    if !path.exists() || !path.is_dir() {
+        return Ok(entries);
+    }
+
+    let dir_entries = fs::read_dir(path).map_err(|e| e.to_string())?;
+    for entry in dir_entries.flatten() {
+        let entry_path = entry.path();
+        let name = entry_path
+            .file_name()
+            .and_then(|n| n.to_str())
+            .unwrap_or("unknown")
+            .to_string();
+
+        // Ignore hidden files/folders and specific system/build dirs
+        if name.starts_with('.') || name == "node_modules" || name == "target" || name == "dist" || name == "build" {
+            continue;
+        }
+
+        let is_dir = entry_path.is_dir();
+        let children = if is_dir {
+            Some(list_dir_helper(&entry_path)?)
+        } else {
+            None
+        };
+
+        entries.push(FileEntry {
+            path: entry_path.to_string_lossy().to_string(),
+            name,
+            is_dir,
+            children,
+        });
+    }
+
+    // Sort: directories first, then alphabetically
+    entries.sort_by(|a, b| {
+        if a.is_dir != b.is_dir {
+            b.is_dir.cmp(&a.is_dir)
+        } else {
+            a.name.to_lowercase().cmp(&b.name.to_lowercase())
+        }
+    });
+
+    Ok(entries)
+}
+
+#[tauri::command]
+pub fn list_directory_recursive(workspace_root: String) -> Result<Vec<FileEntry>, String> {
+    let root = if workspace_root.is_empty() {
+        default_workspace_root()
+    } else {
+        PathBuf::from(workspace_root)
+    };
+
+    if !root.exists() {
+        fs::create_dir_all(&root).map_err(|e| e.to_string())?;
+    }
+
+    list_dir_helper(&root)
+}
+
+#[tauri::command]
+pub fn create_file(path: String) -> Result<(), String> {
+    let file_path = Path::new(&path);
+    if file_path.exists() {
+        return Err("File already exists".to_string());
+    }
+    if let Some(parent) = file_path.parent() {
+        fs::create_dir_all(parent).map_err(|e| e.to_string())?;
+    }
+
+    // Write default template if it is a C++ file
+    let content = if file_path.extension().and_then(|e| e.to_str()) == Some("cpp") {
+        DEFAULT_TEMPLATE.to_string()
+    } else {
+        String::new()
+    };
+
+    fs::write(file_path, content).map_err(|e| format!("Failed to create file: {}", e))
+}
+
+#[tauri::command]
+pub fn create_directory(path: String) -> Result<(), String> {
+    let dir_path = Path::new(&path);
+    if dir_path.exists() {
+        return Err("Directory already exists".to_string());
+    }
+    fs::create_dir_all(dir_path).map_err(|e| format!("Failed to create directory: {}", e))
+}
+
+#[tauri::command]
+pub fn rename_item(old_path: String, new_path: String) -> Result<(), String> {
+    let src = Path::new(&old_path);
+    let dst = Path::new(&new_path);
+    if dst.exists() {
+        return Err("Destination already exists".to_string());
+    }
+    fs::rename(src, dst).map_err(|e| format!("Failed to rename: {}", e))
+}
+
+#[tauri::command]
+pub fn delete_item(path: String) -> Result<(), String> {
+    let p = Path::new(&path);
+    if !p.exists() {
+        return Err("Path does not exist".to_string());
+    }
+    if p.is_dir() {
+        fs::remove_dir_all(p).map_err(|e| format!("Failed to delete directory: {}", e))
+    } else {
+        fs::remove_file(p).map_err(|e| format!("Failed to delete file: {}", e))
+    }
+}
+

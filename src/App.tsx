@@ -2,6 +2,7 @@ import { AppLayout } from "@/ui/layout/AppLayout";
 import { CommandPalette } from "@/components/CommandPalette";
 import { NewProblemModal } from "@/components/NewProblemModal";
 import { SettingsModal } from "@/settings/SettingsModal";
+import { SnippetsModal } from "@/components/SnippetsModal";
 import { useAppInit } from "@/hooks/useAppInit";
 
 export default function App() {
@@ -21,6 +22,8 @@ export default function App() {
       <CommandPalette />
       <NewProblemModal />
       <SettingsModal />
+      <SnippetsModal />
     </>
   );
 }
+

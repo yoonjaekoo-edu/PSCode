@@ -1,10 +1,11 @@
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import Editor, { type OnMount } from "@monaco-editor/react";
 import type { editor } from "monaco-editor";
 import { useTranslation } from "react-i18next";
 import { useEditorStore } from "./editorStore";
 import { useEditorRefStore } from "./editorRefStore";
 import { registerSnippets } from "@/snippets/registerSnippets";
+import { registerFormatter } from "./cppFormatter";
 import { useEditorShortcuts } from "./useEditorShortcuts";
 import { useCompileRun } from "@/compiler/useCompileRun";
 
@@ -25,6 +26,7 @@ export function MonacoEditor() {
   const [editorInstance, setEditorInstance] =
     useState<editor.IStandaloneCodeEditor | null>(null);
   const disposeSnippets = useRef<(() => void) | null>(null);
+  const disposeFormatter = useRef<(() => void) | null>(null);
   const { run } = useCompileRun();
 
   useEditorShortcuts(editorInstance, { onRun: run });
@@ -34,8 +36,18 @@ export function MonacoEditor() {
     setEditorRef(ed);
     disposeSnippets.current?.();
     disposeSnippets.current = registerSnippets(monaco);
+    disposeFormatter.current?.();
+    disposeFormatter.current = registerFormatter(monaco);
     ed.focus();
   }, [setEditorRef]);
+
+  useEffect(() => {
+    return () => {
+      disposeSnippets.current?.();
+      disposeFormatter.current?.();
+    };
+  }, []);
+
 
   if (!filePath) {
     return (

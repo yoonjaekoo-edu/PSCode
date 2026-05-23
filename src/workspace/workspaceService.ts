@@ -2,7 +2,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { useEditorStore } from "@/editor/editorStore";
 import { useSettingsStore } from "@/settings/settingsStore";
 import { DEFAULT_CPP_TEMPLATE } from "./defaultTemplate";
-import type { TodayFile } from "./types";
+import type { TodayFile, FileEntry } from "./types";
 
 const MAX_RECENT = 20;
 
@@ -50,5 +50,26 @@ export const workspaceService = {
     ].slice(0, MAX_RECENT);
     store.updateSettings({ recentFiles: recent });
     await store.persistSettings();
+  },
+
+  async listDirectoryRecursive(): Promise<FileEntry[]> {
+    const root = useSettingsStore.getState().workspaceRoot;
+    return invoke<FileEntry[]>("list_directory_recursive", { workspaceRoot: root });
+  },
+
+  async createFile(path: string): Promise<void> {
+    await invoke("create_file", { path });
+  },
+
+  async createDirectory(path: string): Promise<void> {
+    await invoke("create_directory", { path });
+  },
+
+  async renameItem(oldPath: string, newPath: string): Promise<void> {
+    await invoke("rename_item", { oldPath, newPath });
+  },
+
+  async deleteItem(path: string): Promise<void> {
+    await invoke("delete_item", { path });
   },
 };
