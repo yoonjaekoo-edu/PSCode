@@ -54,7 +54,7 @@ export function formatCppCode(code: string): string {
     const indent = indentMatch ? indentMatch[0] : "";
 
     // Tokenize the line
-    const tokenRegex = /\/\/.*|\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\b\d+(?:\.\d+)?\b|[a-zA-Z_][a-zA-Z0-9_]*|\+\+|--|<<=|>>=|==|!=|<=|>=|\+=|-=|\*=|\/=|%=|&=|\^=|\|=|&&|\|\||<<|>>|->|::|[=+\-*\/%<>&|^!~?:,;\(\)\[\]\{\}]/g;
+    const tokenRegex = /\/\/.*|\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\b\d+(?:\.\d+)?\b|[a-zA-Z_][a-zA-Z0-9_]*|\+\+|--|<<=|>>=|==|!=|<=|>=|\+=|-=|\*=|\/=|%=|&=|\^=|\|=|&&|\|\||<<|>>|->|::|\.|[=+\-*\/%<>&|^!~?:,;\(\)\[\]\{\}]/g;
 
     const tokens: string[] = trimmed.match(tokenRegex) || [];
     if (tokens.length === 0) return line;
