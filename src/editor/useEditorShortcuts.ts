@@ -45,7 +45,9 @@ export function useEditorShortcuts(
         void (async () => {
           const selected = await open({
             multiple: false,
-            filters: [{ name: "C++", extensions: ["cpp", "h", "hpp"] }],
+            filters: [
+              { name: "C++ / Markdown", extensions: ["cpp", "h", "hpp", "md"] },
+            ],
           });
           if (selected && typeof selected === "string") {
             await workspaceService.openFile(selected);

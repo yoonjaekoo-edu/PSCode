@@ -426,6 +426,8 @@ function TreeNode({
             <FolderIcon className="w-3.5 h-3.5 text-yellow-600/90 shrink-0" />
           ) : entry.name.endsWith(".cpp") ? (
             <CppIcon className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+          ) : entry.name.endsWith(".md") ? (
+            <MdIcon className="w-3.5 h-3.5 text-orange-400 shrink-0" />
           ) : (
             <FileIcon className="w-3.5 h-3.5 text-gray-400 shrink-0" />
           )}
@@ -576,6 +578,14 @@ function FolderIcon({ className }: { className?: string }) {
       className={className}
     >
       <path d="M10 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2h-8l-2-2z" />
+    </svg>
+  );
+}
+
+function MdIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M20.56 18H3.44C2.65 18 2 17.37 2 16.59V7.41C2 6.63 2.65 6 3.44 6h17.12c.79 0 1.44.63 1.44 1.41v9.18c0 .78-.65 1.41-1.44 1.41zM6.81 15.19v-3.66l1.92 2.35 1.92-2.35v3.66h1.93V8.81h-1.93l-1.92 2.35-1.92-2.35H4.88v6.38h1.93zm9.62-1.36l-2.81-3.63h1.74V8.81h1.93v1.39h1.74l-2.81 3.63v1.36h1.93v-1.36z" />
     </svg>
   );
 }

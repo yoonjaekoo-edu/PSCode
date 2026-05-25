@@ -1,10 +1,13 @@
 import { invoke } from "@tauri-apps/api/core";
 import { useEditorStore } from "@/editor/editorStore";
+import { useMarkdownStore } from "@/editor/markdownStore";
 import { useSettingsStore } from "@/settings/settingsStore";
 import { DEFAULT_CPP_TEMPLATE } from "./defaultTemplate";
 import type { TodayFile, FileEntry } from "./types";
 
 const MAX_RECENT = 20;
+
+const CODE_EXTENSIONS = new Set(["cpp", "h", "hpp"]);
 
 export const workspaceService = {
   async ensureWorkspace(): Promise<string> {
@@ -38,7 +41,31 @@ export const workspaceService = {
 
   async openFile(path: string): Promise<void> {
     const content = await this.readFile(path);
-    useEditorStore.getState().openFile(path, content);
+    const ext = path.split(".").pop()?.toLowerCase() ?? "";
+
+    if (ext === "md") {
+      useMarkdownStore.getState().openMdFile(path, content);
+      const cppPath = path.replace(/\.md$/i, ".cpp");
+      try {
+        const cppContent = await this.readFile(cppPath);
+        useEditorStore.getState().openFile(cppPath, cppContent);
+      } catch {
+        // No matching .cpp file
+      }
+    } else if (CODE_EXTENSIONS.has(ext)) {
+      useEditorStore.getState().openFile(path, content);
+      const mdPath = path.replace(/\.(cpp|h|hpp)$/i, ".md");
+      try {
+        const mdContent = await this.readFile(mdPath);
+        useMarkdownStore.getState().openMdFile(mdPath, mdContent);
+      } catch {
+        useMarkdownStore.getState().closeMdFile();
+      }
+    } else {
+      useEditorStore.getState().openFile(path, content);
+      useMarkdownStore.getState().closeMdFile();
+    }
+
     await this.addRecentFile(path);
   },
 
