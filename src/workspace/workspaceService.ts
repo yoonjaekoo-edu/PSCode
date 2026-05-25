@@ -43,21 +43,22 @@ export const workspaceService = {
     const content = await this.readFile(path);
     const ext = path.split(".").pop()?.toLowerCase() ?? "";
 
-    if (ext === "md") {
-      useMarkdownStore.getState().openMdFile(path, content);
-      const cppPath = path.replace(/\.md$/i, ".cpp");
-      try {
-        const cppContent = await this.readFile(cppPath);
-        useEditorStore.getState().openFile(cppPath, cppContent);
-      } catch {
-        // No matching .cpp file
-      }
-    } else if (CODE_EXTENSIONS.has(ext)) {
+    if (CODE_EXTENSIONS.has(ext)) {
       useEditorStore.getState().openFile(path, content);
       const mdPath = path.replace(/\.(cpp|h|hpp)$/i, ".md");
       try {
         const mdContent = await this.readFile(mdPath);
         useMarkdownStore.getState().openMdFile(mdPath, mdContent);
+      } catch {
+        useMarkdownStore.getState().closeMdFile();
+      }
+    } else if (ext === "md") {
+      useEditorStore.getState().openFile(path, content);
+      const cppPath = path.replace(/\.md$/i, ".cpp");
+      try {
+        const cppContent = await this.readFile(cppPath);
+        useEditorStore.getState().openFile(cppPath, cppContent);
+        useMarkdownStore.getState().openMdFile(path, content);
       } catch {
         useMarkdownStore.getState().closeMdFile();
       }
@@ -67,6 +68,18 @@ export const workspaceService = {
     }
 
     await this.addRecentFile(path);
+  },
+
+  async createProblemMd(cppPath: string): Promise<string> {
+    const mdPath = cppPath.replace(/\.(cpp|h|hpp)$/i, ".md");
+    const template = `# 문제 설명\n\n\n## 입력\n\n\n## 출력\n\n`;
+    await invoke("write_file", { path: mdPath, content: template });
+    const mdContent = await this.readFile(mdPath);
+    const cppContent = await this.readFile(cppPath);
+    useEditorStore.getState().openFile(cppPath, cppContent);
+    useMarkdownStore.getState().openMdFile(mdPath, mdContent);
+    await this.addRecentFile(mdPath);
+    return mdPath;
   },
 
   async addRecentFile(path: string): Promise<void> {

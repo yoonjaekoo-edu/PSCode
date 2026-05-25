@@ -36,6 +36,18 @@ export function Sidebar() {
         <IconButton title={t("sidebar.newProblem")} onClick={() => setNewProblemOpen(true)}>
           +
         </IconButton>
+        <IconButton
+          title="문제 MD 만들기"
+          onClick={async () => {
+            const cppPath = useEditorStore.getState().filePath;
+            if (cppPath && cppPath.match(/\.(cpp|h|hpp)$/i)) {
+              await workspaceService.createProblemMd(cppPath);
+              await useWorkspaceStore.getState().refreshToday();
+            }
+          }}
+        >
+          <MdIcon className="w-4 h-4 text-[var(--text-secondary)] hover:text-white" />
+        </IconButton>
         <IconButton title="STL 스니펫 목록" onClick={() => setSnippetsOpen?.(true)}>
           <SnippetIcon className="w-4 h-4 text-[var(--text-secondary)] hover:text-white" />
         </IconButton>
@@ -66,6 +78,26 @@ export function Sidebar() {
           className="w-full px-3 py-1.5 text-sm bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white rounded transition-colors font-medium cursor-pointer"
         >
           + {t("sidebar.newProblem")}
+        </button>
+        <button
+          type="button"
+          onClick={async () => {
+            const cppPath = useEditorStore.getState().filePath;
+            if (cppPath && (cppPath.endsWith(".cpp") || cppPath.endsWith(".h") || cppPath.endsWith(".hpp"))) {
+              await workspaceService.createProblemMd(cppPath);
+              await useWorkspaceStore.getState().refreshToday();
+            }
+          }}
+          disabled={!currentPath || !currentPath.match(/\.(cpp|h|hpp)$/i)}
+          className={cn(
+            "w-full px-3 py-1.5 text-xs rounded transition-colors font-medium flex items-center justify-center gap-1.5 cursor-pointer",
+            currentPath?.match(/\.(cpp|h|hpp)$/i)
+              ? "bg-[var(--bg-tertiary)] hover:bg-[var(--bg-hover)] border border-[var(--border)] text-[var(--text-primary)]"
+              : "bg-[var(--bg-tertiary)]/50 border border-[var(--border)] text-[var(--text-muted)] cursor-not-allowed"
+          )}
+        >
+          <MdIcon className="w-3.5 h-3.5" />
+          <span>문제 MD 만들기</span>
         </button>
         <button
           type="button"
@@ -193,6 +225,14 @@ function IconButton({
     >
       {children}
     </button>
+  );
+}
+
+function MdIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <path d="M20.56 18H3.44C2.65 18 2 17.37 2 16.59V7.41C2 6.63 2.65 6 3.44 6h17.12c.79 0 1.44.63 1.44 1.41v9.18c0 .78-.65 1.41-1.44 1.41zM6.81 15.19v-3.66l1.92 2.35 1.92-2.35v3.66h1.93V8.81h-1.93l-1.92 2.35-1.92-2.35H4.88v6.38h1.93zm9.62-1.36l-2.81-3.63h1.74V8.81h1.93v1.39h1.74l-2.81 3.63v1.36h1.93v-1.36z" />
+    </svg>
   );
 }
 

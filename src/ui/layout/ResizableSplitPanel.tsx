@@ -58,7 +58,7 @@ export function ResizableSplitPanel({
       ref={containerRef}
       className={cn("flex flex-1 min-h-0 min-w-0", className)}
     >
-      <div className="overflow-hidden" style={{ width: `${ratio * 100}%` }}>
+      <div className="flex flex-col overflow-hidden min-w-0" style={{ width: `${ratio * 100}%` }}>
         {left}
       </div>
       <div
@@ -73,7 +73,7 @@ export function ResizableSplitPanel({
           document.body.style.userSelect = "none";
         }}
       />
-      <div className="flex-1 overflow-hidden min-w-0">
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {right}
       </div>
     </div>

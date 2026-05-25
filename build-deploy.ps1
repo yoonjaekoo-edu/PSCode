@@ -7,6 +7,8 @@ param(
 
 # Set UTF-8 encoding for console output to support ASCII art characters
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+[Console]::InputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
 
 # ASCII Art
 Write-Host @"

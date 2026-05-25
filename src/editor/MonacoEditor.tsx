@@ -17,6 +17,13 @@ self.MonacoEnvironment = {
   },
 };
 
+function detectLanguage(filePath: string | null): string {
+  if (!filePath) return "cpp";
+  const ext = filePath.split(".").pop()?.toLowerCase() ?? "";
+  if (ext === "md") return "markdown";
+  return "cpp";
+}
+
 export function MonacoEditor() {
   const { t } = useTranslation();
   const content = useEditorStore((s) => s.content);
@@ -28,6 +35,7 @@ export function MonacoEditor() {
   const disposeSnippets = useRef<(() => void) | null>(null);
   const disposeFormatter = useRef<(() => void) | null>(null);
   const { run } = useCompileRun();
+  const language = detectLanguage(filePath);
 
   useEditorShortcuts(editorInstance, { onRun: run });
 
@@ -61,7 +69,7 @@ export function MonacoEditor() {
     <div className="flex flex-1 min-h-0 min-w-0">
       <Editor
         height="100%"
-        language="cpp"
+        language={language}
         theme="vs-dark"
         value={content}
         onChange={(value) => setContent(value ?? "")}
