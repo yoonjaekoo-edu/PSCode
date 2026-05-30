@@ -5,6 +5,7 @@ import { useUiStore } from "@/ui/stores/uiStore";
 import { useSettingsStore } from "./settingsStore";
 import { SUPPORTED_LANGUAGES } from "@/i18n";
 import { workspaceService } from "@/workspace/workspaceService";
+import { CPP_SNIPPETS } from "../snippets/cppSnippets";
 
 export function SettingsModal() {
   const { t } = useTranslation();
@@ -16,6 +17,8 @@ export function SettingsModal() {
     compilerPath: settings.compilerPath,
     workspaceRoot: settings.workspaceRoot,
     autosaveIntervalMs: settings.autosaveIntervalMs,
+    snippetsEnabled: settings.snippetsEnabled,
+    enabledSnippets: { ...settings.enabledSnippets },
   });
 
   useEffect(() => {
@@ -25,6 +28,8 @@ export function SettingsModal() {
         compilerPath: settings.compilerPath,
         workspaceRoot: settings.workspaceRoot,
         autosaveIntervalMs: settings.autosaveIntervalMs,
+        snippetsEnabled: settings.snippetsEnabled,
+        enabledSnippets: { ...settings.enabledSnippets },
       });
     }
   }, [openModal, settings]);
@@ -32,7 +37,14 @@ export function SettingsModal() {
   if (!openModal) return null;
 
   const handleSave = async () => {
-    settings.updateSettings(draft);
+    settings.updateSettings({
+      language: draft.language,
+      compilerPath: draft.compilerPath,
+      workspaceRoot: draft.workspaceRoot,
+      autosaveIntervalMs: draft.autosaveIntervalMs,
+      snippetsEnabled: draft.snippetsEnabled,
+      enabledSnippets: draft.enabledSnippets,
+    });
     await settings.persistSettings();
     await settings.setLanguage(draft.language);
     await workspaceService.ensureWorkspace();
@@ -119,7 +131,7 @@ export function SettingsModal() {
                   onChange={(e) =>
                     setDraft((d) => ({ ...d, compilerPath: e.target.value }))
                   }
-                  placeholder="C:\msys64\mingw64\bin\g++.exe"
+                  placeholder="C:\\msys64\\mingw64\\bin\\g++.exe"
                   className="flex-1 px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border)] rounded text-sm font-mono text-[var(--text-primary)]"
                 />
                 <button
@@ -159,6 +171,47 @@ export function SettingsModal() {
               className="w-full px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border)] rounded text-sm text-[var(--text-primary)]"
             />
           </Field>
+
+          {/* Snippet Controls */}
+          <Field label={t("settings.snippetsEnabled")}>
+            <label className="inline-flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={draft.snippetsEnabled}
+                onChange={(e) =>
+                  setDraft((d) => ({ ...d, snippetsEnabled: e.target.checked }))
+                }
+                className="form-checkbox h-4 w-4 text-[var(--accent)]"
+              />
+              <span>{t("settings.enableSnippets")}</span>
+            </label>
+          </Field>
+
+          {draft.snippetsEnabled && (
+            <Field label={t("settings.individualSnippets")}>
+              <div className="max-h-48 overflow-y-auto grid grid-cols-2 gap-2">
+                {CPP_SNIPPETS.map((s) => (
+                  <label key={s.label} className="inline-flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      checked={draft.enabledSnippets[s.label] ?? true}
+                      onChange={(e) =>
+                        setDraft((d) => ({
+                          ...d,
+                          enabledSnippets: {
+                            ...d.enabledSnippets,
+                            [s.label]: e.target.checked,
+                          },
+                        }))
+                      }
+                      className="form-checkbox h-4 w-4 text-[var(--accent)]"
+                    />
+                    <span>{s.label}</span>
+                  </label>
+                ))}
+              </div>
+            </Field>
+          )}
         </div>
 
         <div className="flex justify-end gap-2 px-4 py-3 border-t border-[var(--border)]">

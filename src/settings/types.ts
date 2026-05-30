@@ -6,6 +6,9 @@ export interface AppSettings {
   recentFiles: string[];
   sidebarCollapsed: boolean;
   consoleHeight: number;
+  gitUrl: string;
+  snippetsEnabled: boolean;
+  enabledSnippets: Record<string, boolean>;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -16,4 +19,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   recentFiles: [],
   sidebarCollapsed: false,
   consoleHeight: 200,
+  gitUrl: "",
+  snippetsEnabled: true,
+  enabledSnippets: {},
 };
