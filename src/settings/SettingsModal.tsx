@@ -19,6 +19,7 @@ export function SettingsModal() {
     autosaveIntervalMs: settings.autosaveIntervalMs,
     snippetsEnabled: settings.snippetsEnabled,
     enabledSnippets: { ...settings.enabledSnippets },
+    gitUrl: settings.gitUrl,
   });
 
   useEffect(() => {
@@ -30,6 +31,7 @@ export function SettingsModal() {
         autosaveIntervalMs: settings.autosaveIntervalMs,
         snippetsEnabled: settings.snippetsEnabled,
         enabledSnippets: { ...settings.enabledSnippets },
+        gitUrl: settings.gitUrl,
       });
     }
   }, [openModal, settings]);
@@ -44,6 +46,7 @@ export function SettingsModal() {
       autosaveIntervalMs: draft.autosaveIntervalMs,
       snippetsEnabled: draft.snippetsEnabled,
       enabledSnippets: draft.enabledSnippets,
+      gitUrl: draft.gitUrl,
     });
     await settings.persistSettings();
     await settings.setLanguage(draft.language);
@@ -121,6 +124,18 @@ export function SettingsModal() {
                 {t("settings.browse")}
               </button>
             </div>
+          </Field>
+
+          <Field label="Git Repository URL">
+            <input
+              type="text"
+              value={draft.gitUrl}
+              onChange={(e) =>
+                setDraft((d) => ({ ...d, gitUrl: e.target.value }))
+              }
+              placeholder="https://github.com/username/repository.git"
+              className="w-full px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border)] rounded text-sm text-[var(--text-primary)] font-mono outline-none focus:border-[var(--accent)]"
+            />
           </Field>
 
           <Field label={t("settings.compilerPath")}>

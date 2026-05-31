@@ -54,14 +54,7 @@ export const workspaceService = {
       }
     } else if (ext === "md") {
       useEditorStore.getState().openFile(path, content);
-      const cppPath = path.replace(/\.md$/i, ".cpp");
-      try {
-        const cppContent = await this.readFile(cppPath);
-        useEditorStore.getState().openFile(cppPath, cppContent);
-        useMarkdownStore.getState().openMdFile(path, content);
-      } catch {
-        useMarkdownStore.getState().closeMdFile();
-      }
+      useMarkdownStore.getState().closeMdFile();
     } else {
       useEditorStore.getState().openFile(path, content);
       useMarkdownStore.getState().closeMdFile();

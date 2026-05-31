@@ -15,6 +15,9 @@ pub struct AppSettings {
     pub recent_files: Vec<String>,
     pub sidebar_collapsed: bool,
     pub console_height: u32,
+    pub git_url: String,
+    pub snippets_enabled: bool,
+    pub enabled_snippets: std::collections::HashMap<String, bool>,
 }
 
 impl Default for AppSettings {
@@ -27,6 +30,9 @@ impl Default for AppSettings {
             recent_files: Vec::new(),
             sidebar_collapsed: false,
             console_height: 200,
+            git_url: String::new(),
+            snippets_enabled: true,
+            enabled_snippets: std::collections::HashMap::new(),
         }
     }
 }
