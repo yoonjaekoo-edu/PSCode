@@ -1,6 +1,14 @@
 import { useMemo, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useMarkdownStore } from "./markdownStore";
+import katex from "katex";
+import "katex/dist/katex.min.css";
+
+interface MathPlaceholder {
+  id: string;
+  latex: string;
+  isBlock: boolean;
+}
 
 function escapeHtml(text: string): string {
   return text
@@ -8,6 +16,59 @@ function escapeHtml(text: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+function extractMath(md: string): { text: string; placeholders: MathPlaceholder[] } {
+  const placeholders: MathPlaceholder[] = [];
+  let counter = 0;
+  let text = md;
+
+  // 1. Block Math: \[ ... \]
+  text = text.replace(/\\\[([\s\S]*?)\\\]/g, (_, latex) => {
+    const id = `___MATH_BLOCK_${counter++}___`;
+    placeholders.push({ id, latex, isBlock: true });
+    return id;
+  });
+
+  // 2. Block Math: $$ ... $$
+  text = text.replace(/\$\$([\s\S]*?)\$\$/g, (_, latex) => {
+    const id = `___MATH_BLOCK_${counter++}___`;
+    placeholders.push({ id, latex, isBlock: true });
+    return id;
+  });
+
+  // 3. Inline Math: \( ... \)
+  text = text.replace(/\\\(([\s\S]*?)\\\)/g, (_, latex) => {
+    const id = `___MATH_INLINE_${counter++}___`;
+    placeholders.push({ id, latex, isBlock: false });
+    return id;
+  });
+
+  // 4. Inline Math: $ ... $
+  text = text.replace(/\$([^\$\s](?:[^\$\n]*?[^\$\s])?)\$/g, (_, latex) => {
+    const id = `___MATH_INLINE_${counter++}___`;
+    placeholders.push({ id, latex, isBlock: false });
+    return id;
+  });
+
+  return { text, placeholders };
+}
+
+function restoreMath(html: string, placeholders: MathPlaceholder[]): string {
+  let result = html;
+  for (const placeholder of placeholders) {
+    try {
+      const rendered = katex.renderToString(placeholder.latex, {
+        displayMode: placeholder.isBlock,
+        throwOnError: false,
+      });
+      result = result.split(placeholder.id).join(rendered);
+    } catch (err) {
+      console.error(err);
+      result = result.split(placeholder.id).join(escapeHtml(placeholder.latex));
+    }
+  }
+  return result;
 }
 
 function parseInline(text: string): string {
@@ -20,7 +81,8 @@ function parseInline(text: string): string {
 }
 
 function renderMarkdown(md: string): string {
-  const lines = md.split("\n");
+  const { text, placeholders } = extractMath(md);
+  const lines = text.split("\n");
   const parts: string[] = [];
   let inCode = false;
   let codeBuf: string[] = [];
@@ -63,27 +125,23 @@ function renderMarkdown(md: string): string {
       continue;
     }
 
-    closeList();
-
-    if (trimmed.startsWith("### ")) {
-      parts.push(`<h3 class="md-h3">${parseInline(trimmed.slice(4))}</h3>`);
-      continue;
-    }
-    if (trimmed.startsWith("## ")) {
-      parts.push(`<h2 class="md-h2">${parseInline(trimmed.slice(3))}</h2>`);
-      continue;
-    }
-    if (trimmed.startsWith("# ")) {
-      parts.push(`<h1 class="md-h1">${parseInline(trimmed.slice(2))}</h1>`);
+    const headingMatch = trimmed.match(/^(#{1,6})\s+(.*)$/);
+    if (headingMatch) {
+      closeList();
+      const level = headingMatch[1].length;
+      const headingContent = headingMatch[2];
+      parts.push(`<h${level} class="md-h${level}">${parseInline(headingContent)}</h${level}>`);
       continue;
     }
 
     if (/^-{3,}$/.test(trimmed)) {
+      closeList();
       parts.push(`<hr class="md-hr">`);
       continue;
     }
 
     if (trimmed.startsWith("> ")) {
+      closeList();
       parts.push(`<blockquote class="md-blockquote">${parseInline(trimmed.slice(2))}</blockquote>`);
       continue;
     }
@@ -116,6 +174,7 @@ function renderMarkdown(md: string): string {
       continue;
     }
 
+    closeList();
     parts.push(`<p class="md-p">${parseInline(trimmed)}</p>`);
   }
 
@@ -126,7 +185,8 @@ function renderMarkdown(md: string): string {
 
   closeList();
 
-  return parts.join("\n");
+  const rawHtml = parts.join("\n");
+  return restoreMath(rawHtml, placeholders);
 }
 
 export function MarkdownViewer() {
