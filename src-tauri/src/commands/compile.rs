@@ -15,12 +15,15 @@ pub struct RunOutput {
     pub execution_time_ms: u64,
 }
 
-fn resolve_compiler(compiler_path: Option<String>) -> Result<String, String> {
-    let info = detect_compiler(compiler_path);
+fn resolve_compiler(
+    app_handle: &tauri::AppHandle,
+    compiler_path: Option<String>,
+) -> Result<String, String> {
+    let info = detect_compiler(app_handle.clone(), compiler_path);
     if info.found {
         Ok(info.path)
     } else {
-        Err("Compiler not found. Install MSYS2 mingw64 g++ or set path in Settings.".to_string())
+        Err("Compiler not found. Run install_compiler or set path in Settings.".to_string())
     }
 }
 
@@ -37,11 +40,12 @@ fn exe_extension() -> &'static str {
 
 #[tauri::command]
 pub async fn compile_and_run(
+    app_handle: tauri::AppHandle,
     source_path: String,
     input: String,
     compiler_path: Option<String>,
 ) -> Result<RunOutput, String> {
-    let gpp = resolve_compiler(compiler_path)?;
+    let gpp = resolve_compiler(&app_handle, compiler_path)?;
 
     let source = PathBuf::from(&source_path);
     if !source.exists() {

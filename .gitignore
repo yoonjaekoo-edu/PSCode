@@ -19,6 +19,9 @@ Thumbs.db
 !.vscode/extensions.json
 .idea/
 
+# GCC bundle (downloaded during build)
+src-tauri/resources/gcc/
+
 # Logs
 *.log
 npm-debug.log*

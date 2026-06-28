@@ -68,11 +68,6 @@ export function CommandPalette() {
         action: () => useSettingsStore.getState().setLanguage("ko"),
       },
       {
-        id: "langEn",
-        labelKey: "command.switchLangEn",
-        action: () => useSettingsStore.getState().setLanguage("en"),
-      },
-      {
         id: "autoSpacing",
         labelKey: "command.autoSpacing",
         action: () => {

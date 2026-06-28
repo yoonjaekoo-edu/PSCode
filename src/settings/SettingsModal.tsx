@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { open } from "@tauri-apps/plugin-dialog";
 import { useUiStore } from "@/ui/stores/uiStore";
 import { useSettingsStore } from "./settingsStore";
-import { SUPPORTED_LANGUAGES } from "@/i18n";
 import { workspaceService } from "@/workspace/workspaceService";
 import { CPP_SNIPPETS } from "../snippets/cppSnippets";
 
@@ -99,11 +98,7 @@ export function SettingsModal() {
               }
               className="w-full px-3 py-2 bg-[var(--bg-primary)] border border-[var(--border)] rounded text-sm text-[var(--text-primary)]"
             >
-              {SUPPORTED_LANGUAGES.map((lang) => (
-                <option key={lang} value={lang}>
-                  {lang === "ko" ? "한국어" : "English"}
-                </option>
-              ))}
+              <option value="ko">한국어</option>
             </select>
           </Field>
 

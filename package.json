@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "download-gcc": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/download-gcc.ps1",
+    "tauri:build": "npm run download-gcc && tauri build"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",

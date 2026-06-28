@@ -23,7 +23,7 @@ pub struct AppSettings {
 impl Default for AppSettings {
     fn default() -> Self {
         Self {
-            language: "en".to_string(),
+            language: "ko".to_string(),
             compiler_path: String::new(),
             workspace_root: default_workspace_root().to_string_lossy().to_string(),
             autosave_interval_ms: 800,

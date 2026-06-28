@@ -135,7 +135,7 @@ export function WorkspaceTree() {
   if (loading) {
     return (
       <div className="px-3 py-4 text-xs text-[var(--text-muted)] animate-pulse">
-        {t("workspace.loading", "작업 영역 불러오는 중...")}
+        {t("workspace.loading")}
       </div>
     );
   }
@@ -145,7 +145,7 @@ export function WorkspaceTree() {
       {/* Root actions toolbar */}
       <div className="flex items-center justify-between px-3 py-1.5 border-b border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-secondary)]">
         <span className="text-xs font-semibold uppercase tracking-wide">
-          {t("workspace.files", "FILES")}
+          {t("workspace.files")}
         </span>
         <div className="flex items-center gap-1">
           <button
@@ -185,7 +185,7 @@ export function WorkspaceTree() {
       <div className="flex-1 overflow-y-auto py-1 font-mono text-xs">
         {files.length === 0 ? (
           <p className="px-3 py-2 text-xs text-[var(--text-muted)] italic">
-            {t("workspace.empty", "작업 폴더가 비어 있습니다.")}
+            {t("workspace.empty")}
           </p>
         ) : (
           files.map((entry) => (

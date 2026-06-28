@@ -12,7 +12,7 @@ export interface AppSettings {
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
-  language: "en",
+  language: "ko",
   compilerPath: "",
   workspaceRoot: "",
   autosaveIntervalMs: 800,

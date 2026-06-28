@@ -64,7 +64,6 @@
     "toggleSidebar": "사이드바 토글",
     "toggleConsole": "콘솔 토글",
     "switchLangKo": "한국어로 전환",
-    "switchLangEn": "영어로 전환",
     "autoSpacing": "띄어쓰기 자동 수정",
     "formatCode": "코드 정렬"
   },
@@ -72,6 +71,15 @@
     "saved": "저장됨",
     "unsaved": "저장 안 됨",
     "saving": "저장 중..."
+  },
+  "git": {
+    "push": "커밋 및 푸시",
+    "pushTitle": "Git 추가, 커밋 및 원격 푸시"
+  },
+  "workspace": {
+    "loading": "작업 영역 불러오는 중...",
+    "files": "파일",
+    "empty": "작업 폴더가 비어 있습니다."
   },
   "shortcuts": {
     "run": "Ctrl+Enter / F5",
